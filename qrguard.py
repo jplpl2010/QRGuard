@@ -129,7 +129,9 @@ def inicio():
 }
 
 body {
+
     font-family: Arial, Helvetica, sans-serif;
+
     min-height: 100vh;
 
     background:
@@ -142,67 +144,94 @@ body {
     color: white;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     padding: 25px;
 }
 
 .container {
+
     width: 100%;
+
     max-width: 500px;
+
     text-align: center;
 }
 
 .logo {
+
     font-size: 42px;
+
     font-weight: 800;
+
     margin-bottom: 15px;
 }
 
 .logo span {
+
     color: #35a7ff;
 }
 
 .subtitle {
+
     color: #aeb9c9;
+
     font-size: 17px;
+
     line-height: 1.6;
+
     margin-bottom: 35px;
 }
 
 .card {
-    background: rgba(255,255,255,.07);
 
-    border: 1px solid rgba(255,255,255,.1);
+    background:
+        rgba(255,255,255,.07);
 
-    backdrop-filter: blur(15px);
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    backdrop-filter:
+        blur(15px);
 
     border-radius: 25px;
 
     padding: 35px;
 
     box-shadow:
-        0 20px 60px rgba(0,0,0,.35);
+        0 20px 60px
+        rgba(0,0,0,.35);
 }
 
 .icon {
+
     font-size: 50px;
+
     margin-bottom: 20px;
 }
 
 h1 {
+
     font-size: 26px;
+
     margin-bottom: 10px;
 }
 
 .description {
+
     color: #aeb9c9;
+
     line-height: 1.5;
+
     margin-bottom: 25px;
 }
 
 .button {
+
     display: block;
 
     width: 100%;
@@ -223,11 +252,14 @@ h1 {
 }
 
 .button:hover {
+
     background: #0878df;
+
     transform: translateY(-2px);
 }
 
 .footer {
+
     margin-top: 25px;
 
     color: #687589;
@@ -262,22 +294,28 @@ h1 {
         </h1>
 
         <p class="description">
-            Cadastre um objeto e gere um QR Code
-            exclusivo para facilitar sua devolução
-            caso ele seja perdido.
+
+            Cadastre seus dados e gere um
+            QR Code exclusivo para facilitar
+            a devolução caso seu objeto seja
+            perdido.
+
         </p>
 
         <a
             href="/cadastrar"
             class="button"
         >
-            📦 Cadastrar objeto
+            📦 Cadastrar
         </a>
 
     </div>
 
     <div class="footer">
-        QRGuard • Proteção inteligente para seus objetos
+
+        QRGuard • Proteção inteligente
+        para seus objetos
+
     </div>
 
 </div>
@@ -297,8 +335,8 @@ def cadastrar():
 
     if request.method == "POST":
 
-        nome = request.form["nome"]
-        numero = request.form["numero"]
+        nome = request.form["nome"].strip()
+        numero = request.form["numero"].strip()
 
         codigo = gerar_codigo()
 
@@ -313,6 +351,7 @@ def cadastrar():
         )
 
         conexao.commit()
+
         conexao.close()
 
         gerar_qr(codigo)
@@ -331,7 +370,7 @@ def cadastrar():
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>QRGuard — Objeto cadastrado</title>
+<title>QRGuard — Cadastro concluído</title>
 
 <style>
 
@@ -342,7 +381,11 @@ def cadastrar():
 }}
 
 body {{
-    font-family: Arial, Helvetica, sans-serif;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
     background:
         linear-gradient(
@@ -359,12 +402,16 @@ body {{
 }}
 
 .container {{
+
     width: 100%;
+
     max-width: 520px;
+
     margin: auto;
 }}
 
 .logo {{
+
     text-align: center;
 
     font-size: 28px;
@@ -375,26 +422,35 @@ body {{
 }}
 
 .logo span {{
+
     color: #35a7ff;
 }}
 
 .card {{
-    background: rgba(255,255,255,.07);
 
-    border: 1px solid rgba(255,255,255,.1);
+    background:
+        rgba(255,255,255,.07);
 
-    backdrop-filter: blur(15px);
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    backdrop-filter:
+        blur(15px);
 
     border-radius: 25px;
 
     padding: 30px;
 
     box-shadow:
-        0 20px 60px rgba(0,0,0,.35);
+        0 20px 60px
+        rgba(0,0,0,.35);
 }}
 
 .success {{
+
     width: 65px;
+
     height: 65px;
 
     background: #19c37d;
@@ -402,15 +458,19 @@ body {{
     border-radius: 50%;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     font-size: 32px;
 
-    margin: 0 auto 20px;
+    margin:
+        0 auto 20px;
 }}
 
 h1 {{
+
     text-align: center;
 
     font-size: 27px;
@@ -419,6 +479,7 @@ h1 {{
 }}
 
 .subtitle {{
+
     text-align: center;
 
     color: #aeb9c9;
@@ -427,7 +488,9 @@ h1 {{
 }}
 
 .info {{
-    background: rgba(255,255,255,.05);
+
+    background:
+        rgba(255,255,255,.05);
 
     border-radius: 15px;
 
@@ -437,16 +500,19 @@ h1 {{
 }}
 
 .info p {{
+
     margin: 8px 0;
 
     color: #d8e0eb;
 }}
 
 .info strong {{
+
     color: white;
 }}
 
 .qr {{
+
     background: white;
 
     border-radius: 18px;
@@ -455,10 +521,12 @@ h1 {{
 
     width: fit-content;
 
-    margin: 20px auto;
+    margin:
+        20px auto;
 }}
 
 .qr img {{
+
     width: 250px;
 
     max-width: 100%;
@@ -467,6 +535,7 @@ h1 {{
 }}
 
 .codigo {{
+
     text-align: center;
 
     font-size: 13px;
@@ -477,6 +546,7 @@ h1 {{
 }}
 
 .codigo strong {{
+
     color: #35a7ff;
 
     font-size: 18px;
@@ -485,6 +555,7 @@ h1 {{
 }}
 
 .button {{
+
     display: block;
 
     width: 100%;
@@ -505,28 +576,36 @@ h1 {{
 }}
 
 .primary {{
+
     background: #168cff;
 
     color: white;
 }}
 
 .primary:hover {{
+
     background: #0878df;
 
-    transform: translateY(-2px);
+    transform:
+        translateY(-2px);
 }}
 
 .secondary {{
-    background: rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.08);
 
     color: white;
 }}
 
 .secondary:hover {{
-    background: rgba(255,255,255,.14);
+
+    background:
+        rgba(255,255,255,.14);
 }}
 
 .footer {{
+
     text-align: center;
 
     color: #687589;
@@ -555,23 +634,39 @@ h1 {{
         </div>
 
         <h1>
-            Objeto cadastrado!
+            Cadastro concluído!
         </h1>
 
         <p class="subtitle">
-            Seu QR Code está pronto para ser usado.
+
+            Seu QR Code está pronto.
+
         </p>
 
         <div class="info">
 
             <p>
-                <strong>Objeto:</strong><br>
+
+                <strong>
+                    Nome:
+                </strong>
+
+                <br>
+
                 {nome}
+
             </p>
 
             <p>
-                <strong>Telefone:</strong><br>
+
+                <strong>
+                    Telefone:
+                </strong>
+
+                <br>
+
                 {numero}
+
             </p>
 
         </div>
@@ -580,14 +675,16 @@ h1 {{
 
             <img
                 src="/qrcode/{codigo}"
-                alt="QR Code do objeto"
+                alt="QR Code"
             >
 
         </div>
 
         <div class="codigo">
 
-            Código do objeto<br>
+            Código do QR Code
+
+            <br>
 
             <strong>
                 {codigo}
@@ -600,27 +697,39 @@ h1 {{
             download
             class="button primary"
         >
-            ↓ &nbsp; Baixar QR Code
+
+            ↓ &nbsp;
+            Baixar QR Code
+
         </a>
 
         <a
             href="/objeto/{codigo}"
             class="button secondary"
         >
-            👁 &nbsp; Ver página pública
+
+            👁 &nbsp;
+            Ver página pública
+
         </a>
 
         <a
             href="/cadastrar"
             class="button secondary"
         >
-            + &nbsp; Cadastrar outro objeto
+
+            + &nbsp;
+            Cadastrar outra pessoa
+
         </a>
 
     </div>
 
     <div class="footer">
-        QRGuard • Proteção inteligente para seus objetos
+
+        QRGuard • Proteção inteligente
+        para seus objetos
+
     </div>
 
 </div>
@@ -629,10 +738,6 @@ h1 {{
 
 </html>
 """
-
-    # ========================================================
-    # FORMULÁRIO DE CADASTRO
-    # ========================================================
 
     return """
 <!DOCTYPE html>
@@ -648,11 +753,12 @@ h1 {{
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>QRGuard — Cadastrar objeto</title>
+<title>QRGuard — Cadastro</title>
 
 <style>
 
 * {
+
     box-sizing: border-box;
 
     margin: 0;
@@ -697,9 +803,7 @@ body {
     font-weight: 800;
 
     margin:
-        20px
-        0
-        35px;
+        20px 0 35px;
 }
 
 .logo span {
@@ -844,7 +948,8 @@ button:hover {
 
     background: #0878df;
 
-    transform: translateY(-2px);
+    transform:
+        translateY(-2px);
 }
 
 .security {
@@ -889,37 +994,39 @@ button:hover {
 <div class="container">
 
     <div class="logo">
+
         QR<span>Guard</span>
+
     </div>
 
     <div class="card">
 
         <div class="icon">
-            📦
+            👤
         </div>
 
         <h1>
-            Cadastrar objeto
+            Cadastrar pessoa
         </h1>
 
         <p class="subtitle">
 
-            Crie um QR Code exclusivo
-            para identificar seu objeto
-            e facilitar sua devolução.
+            Informe seus dados para gerar
+            um QR Code exclusivo.
 
         </p>
 
         <form method="POST">
 
             <label>
-                Nome do objeto
+                Nome
             </label>
 
             <input
                 type="text"
                 name="nome"
-                placeholder="Ex: Mochila preta"
+                placeholder="Ex: João Pedro"
+                autocomplete="name"
                 required
             >
 
@@ -928,9 +1035,10 @@ button:hover {
             </label>
 
             <input
-                type="text"
+                type="tel"
                 name="numero"
                 placeholder="Ex: (67) 99999-9999"
+                autocomplete="tel"
                 required
             >
 
@@ -944,9 +1052,9 @@ button:hover {
 
         <div class="security">
 
-            🔒 Seus dados são utilizados apenas
-            para identificar o objeto e facilitar
-            o contato caso ele seja encontrado.
+            🔒 Seus dados são utilizados para
+            facilitar o contato caso o objeto
+            seja encontrado.
 
         </div>
 
@@ -1018,7 +1126,7 @@ def objeto(codigo):
 
 
 # ============================================================
-# SERVIDOR LOCAL
+# SERVIDOR
 # ============================================================
 
 if __name__ == "__main__":
