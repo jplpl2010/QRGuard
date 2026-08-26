@@ -45,5 +45,3 @@ def objeto(codigo):
 
 # Gera o QR Code do objeto ABC123
 gerar_qr("ABC123")
-
-app.run(debug=True)
