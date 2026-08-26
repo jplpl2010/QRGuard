@@ -3,7 +3,7 @@ import qrcode
 import os
 import random
 import string
-import sqlite3
+import psycopg
 
 app = Flask(__name__)
 
@@ -11,17 +11,18 @@ BASE_URL = "https://qrguard2.onrender.com"
 
 os.makedirs("qrcodes", exist_ok=True)
 
-DATABASE = "qrgurad.db"
-
 
 # =========================
 # BANCO DE DADOS
 # =========================
 
 def conectar_banco():
-    conexao = sqlite3.connect(DATABASE)
-    conexao.row_factory = sqlite3.Row
-    return conexao
+    database_url = os.environ.get("DATABASE_URL")
+
+    if not database_url:
+        raise RuntimeError("DATABASE_URL não configurada.")
+
+    return psycopg.connect(database_url)
 
 
 def criar_banco():
@@ -29,8 +30,8 @@ def criar_banco():
 
     conexao.execute("""
         CREATE TABLE IF NOT EXISTS objetos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            codigo TEXT UNIQUE NOT NULL,
+            id SERIAL PRIMARY KEY,
+            codigo VARCHAR(6) UNIQUE NOT NULL,
             nome TEXT NOT NULL,
             numero TEXT NOT NULL,
             criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -41,16 +42,17 @@ def criar_banco():
     conexao.close()
 
 
-# Cria a tabela quando o servidor inicia
 criar_banco()
 
 
 # =========================
-# QR CODE
+# CÓDIGO DO OBJETO
 # =========================
 
 def gerar_codigo():
+
     while True:
+
         codigo = "".join(
             random.choices(
                 string.ascii_uppercase + string.digits,
@@ -61,7 +63,7 @@ def gerar_codigo():
         conexao = conectar_banco()
 
         resultado = conexao.execute(
-            "SELECT id FROM objetos WHERE codigo = ?",
+            "SELECT id FROM objetos WHERE codigo = %s",
             (codigo,)
         ).fetchone()
 
@@ -71,12 +73,18 @@ def gerar_codigo():
             return codigo
 
 
+# =========================
+# QR CODE
+# =========================
+
 def gerar_qr(codigo):
+
     url = f"{BASE_URL}/objeto/{codigo}"
 
     img = qrcode.make(url)
 
     caminho = f"qrcodes/{codigo}.png"
+
     img.save(caminho)
 
     print(f"QR Code criado: {caminho}")
@@ -86,11 +94,12 @@ def gerar_qr(codigo):
 
 
 # =========================
-# PÁGINA INICIAL
+# INÍCIO
 # =========================
 
 @app.route("/")
 def inicio():
+
     return """
     <h1>QRGuard funcionando!</h1>
 
@@ -119,7 +128,7 @@ def cadastrar():
         conexao.execute(
             """
             INSERT INTO objetos (codigo, nome, numero)
-            VALUES (?, ?, ?)
+            VALUES (%s, %s, %s)
             """,
             (codigo, nome, numero)
         )
@@ -204,7 +213,7 @@ def cadastrar():
 
 
 # =========================
-# EXIBIR QR CODE
+# QR CODE
 # =========================
 
 @app.route("/qrcode/<codigo>")
@@ -222,7 +231,7 @@ def qrcode_imagem(codigo):
 
 
 # =========================
-# PÁGINA DO OBJETO
+# OBJETO
 # =========================
 
 @app.route("/objeto/<codigo>")
@@ -234,7 +243,7 @@ def objeto(codigo):
         """
         SELECT nome, numero
         FROM objetos
-        WHERE codigo = ?
+        WHERE codigo = %s
         """,
         (codigo,)
     ).fetchone()
@@ -246,16 +255,17 @@ def objeto(codigo):
 
     return render_template(
         "objeto.html",
-        nome=dados["nome"],
-        numero=dados["numero"]
+        nome=dados[0],
+        numero=dados[1]
     )
 
 
 # =========================
-# EXECUÇÃO LOCAL
+# SERVIDOR
 # =========================
 
 if __name__ == "__main__":
+
     app.run(
         host="127.0.0.1",
         port=5000,
