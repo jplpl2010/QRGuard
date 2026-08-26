@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QRGuard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h1>🔐 QRGuard</h1>
+
+        <h2>Objeto encontrado!</h2>
+
+        <p class="texto">Este objeto pertence a:</p>
+
+        <div class="informacao">
+            <strong>Nome</strong>
+            <p>{{ nome }}</p>
+        </div>
+
+        <div class="informacao">
+            <strong>Número</strong>
+            <p>{{ numero }}</p>
+        </div>
+
+    </div>
+
+</body>
