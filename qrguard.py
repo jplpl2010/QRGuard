@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:5000")
+BASE_URL = "https://qrguard2.onrender.com"
 
 # Cria a pasta dos QR Codes caso ela não exista
 os.makedirs("qrcodes", exist_ok=True)
