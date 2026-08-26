@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 import qrcode
 import os
 import random
@@ -10,7 +10,6 @@ BASE_URL = "https://qrguard2.onrender.com"
 
 os.makedirs("qrcodes", exist_ok=True)
 
-# Guarda os objetos cadastrados enquanto o servidor estiver funcionando
 objetos = {}
 
 
@@ -27,7 +26,7 @@ def gerar_qr(codigo):
     img.save(caminho)
 
     print(f"QR Code criado: {caminho}")
-    print(f"Endereço: {url}")
+    print(f"Endereco: {url}")
 
     return caminho
 
@@ -62,17 +61,23 @@ def cadastrar():
 
         <p><strong>Nome:</strong> {nome}</p>
         <p><strong>Telefone:</strong> {numero}</p>
-        <p><strong>Código:</strong> {codigo}</p>
+        <p><strong>Codigo:</strong> {codigo}</p>
 
-        <p>
-            <a href="/objeto/{codigo}">
-                Ver página do objeto
-            </a>
-        </p>
+        <h2>QR Code</h2>
 
-        <p>
-            O QR Code foi criado na pasta qrcodes.
-        </p>
+        <img src="/qrcode/{codigo}" width="300">
+
+        <br><br>
+
+        <a href="/qrcode/{codigo}" download>
+            <button>Baixar QR Code</button>
+        </a>
+
+        <br><br>
+
+        <a href="/objeto/{codigo}">
+            Ver pagina do objeto
+        </a>
         """
 
     return """
@@ -96,11 +101,22 @@ def cadastrar():
     """
 
 
+@app.route("/qrcode/<codigo>")
+def qrcode_imagem(codigo):
+
+    caminho = f"qrcodes/{codigo}.png"
+
+    if not os.path.exists(caminho):
+        return "QR Code nao encontrado", 404
+
+    return send_file(caminho, mimetype="image/png")
+
+
 @app.route("/objeto/<codigo>")
 def objeto(codigo):
 
     if codigo not in objetos:
-        return "Objeto não encontrado", 404
+        return "Objeto nao encontrado", 404
 
     dados = objetos[codigo]
 
@@ -109,6 +125,8 @@ def objeto(codigo):
         nome=dados["nome"],
         numero=dados["numero"]
     )
+
+
 if __name__ == "__main__":
     app.run(
         host="127.0.0.1",
