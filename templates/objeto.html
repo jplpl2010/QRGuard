@@ -1,35 +1,206 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>QRGuard</title>
+    <title>QRGuard - Objeto encontrado</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef4ff, #f8fbff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #1f2937;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px 30px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.10);
+            text-align: center;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            background: #2563eb;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .status {
+            display: inline-block;
+            background: #dcfce7;
+            color: #15803d;
+            padding: 8px 14px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #111827;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .info {
+            text-align: left;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 22px;
+        }
+
+        .info-item {
+            margin-bottom: 16px;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .label {
+            display: block;
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .phone {
+            color: #2563eb;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border-radius: 13px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            background: #2563eb;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .warning {
+            margin-top: 22px;
+            padding: 15px;
+            background: #fff7ed;
+            border-radius: 13px;
+            color: #9a3412;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 18px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .footer strong {
+            color: #2563eb;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="card">
+    <div class="container">
 
-        <h1>🔐 QRGuard</h1>
+        <div class="card">
 
-        <h2>Objeto encontrado!</h2>
+            <div class="logo">
+                QR
+            </div>
 
-        <p class="texto">Este objeto pertence a:</p>
+            <div class="status">
+                ✓ Objeto identificado
+            </div>
 
-        <div class="informacao">
-            <strong>Nome</strong>
-            <p>{{ nome }}</p>
+            <h1>Este objeto tem dono</h1>
+
+            <p class="subtitle">
+                Você encontrou um objeto perdido.
+                Utilize as informações abaixo para entrar em contato com o proprietário.
+            </p>
+
+            <div class="info">
+
+                <div class="info-item">
+                    <span class="label">PROPRIETÁRIO</span>
+                    <span class="value">{{ nome }}</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">TELEFONE</span>
+                    <span class="value phone">{{ numero }}</span>
+                </div>
+
+            </div>
+
+            <a class="button" href="tel:{{ numero }}">
+                📞 Entrar em contato
+            </a>
+
+            <div class="warning">
+                🔒 Respeite a privacidade do proprietário.
+                Utilize estas informações apenas para devolver o objeto.
+            </div>
+
         </div>
 
-        <div class="informacao">
-            <strong>Número</strong>
-            <p>{{ numero }}</p>
+        <div class="footer">
+            Protegido por <strong>QRGuard</strong>
         </div>
 
     </div>
 
 </body>
+
+</html>
