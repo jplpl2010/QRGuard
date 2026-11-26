@@ -11,6 +11,7 @@ import psycopg
 
 app = Flask(__name__)
 
+# Configurações do QRGuard
 app.secret_key = os.environ.get(
     "SECRET_KEY",
     "chave-local-apenas-desenvolvimento"
@@ -18,6 +19,9 @@ app.secret_key = os.environ.get(
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = (
+    os.environ.get("COOKIE_SECURE", "false").lower() == "true"
+)
 
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
 
@@ -27,6 +31,7 @@ BASE_URL = os.environ.get(
 )
 
 
+# CONEXÃO COM O BANCO DE DADOS
 def conectar_banco():
     database_url = os.environ.get("DATABASE_URL")
 
@@ -38,7 +43,7 @@ def conectar_banco():
     return psycopg.connect(database_url)
 
 
-
+# PREPARAÇÃO DO BANCO
 def preparar_banco():
     with conectar_banco() as conn:
         conn.execute("""
@@ -56,7 +61,7 @@ def preparar_banco():
         """)
 
 
-
+# PÁGINA INICIAL
 @app.route("/")
 def inicio():
     return """
@@ -66,129 +71,17 @@ def inicio():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRGuard</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #07111f, #0d1b2f);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 25px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 15px;
-        }
-
-        .logo span {
-            color: #35a7ff;
-        }
-
-        .subtitle {
-            color: #aeb9c9;
-            font-size: 17px;
-            line-height: 1.6;
-            margin-bottom: 35px;
-        }
-
-        .card {
-            background: rgba(255,255,255,.07);
-            border: 1px solid rgba(255,255,255,.1);
-            backdrop-filter: blur(15px);
-            border-radius: 25px;
-            padding: 35px;
-            box-shadow: 0 20px 60px rgba(0,0,0,.35);
-        }
-
-        .icon {
-            font-size: 50px;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
-
-        .description {
-            color: #aeb9c9;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .button {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            border-radius: 13px;
-            background: #168cff;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            transition: .2s;
-        }
-
-        .button:hover {
-            background: #0878df;
-            transform: translateY(-2px);
-        }
-
-        .footer {
-            margin-top: 25px;
-            color: #687589;
-            font-size: 12px;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">QR<span>Guard</span></div>
-
-        <p class="subtitle">
-            Proteção inteligente para seus objetos.
-        </p>
-
-        <div class="card">
-            <div class="icon">🛡️</div>
-
-            <h1>Proteja seus objetos</h1>
-
-            <p class="description">
-                Gere um QR Code exclusivo para facilitar
-                a devolução dos seus objetos caso sejam perdidos.
-            </p>
-
-            <a href="/login" class="button">
-                Acessar painel administrativo
-            </a>
-        </div>
-
-        <div class="footer">
-            QRGuard · Proteção inteligente para seus objetos
-        </div>
-    </div>
+    <h1>QRGuard</h1>
+    <p>Proteção inteligente para seus objetos.</p>
+    <a href="/login">Acessar painel administrativo</a>
 </body>
 </html>
 """
 
 
-
+# LOGIN ADMINISTRATIVO
 @app.route("/login", methods=["GET", "POST"])
 def login():
     erro = None
@@ -208,6 +101,7 @@ def login():
     return render_template("login.html", erro=erro)
 
 
+# PAINEL ADMINISTRATIVO
 @app.route("/admin")
 def admin():
     if not session.get("administrador"):
@@ -223,6 +117,7 @@ def admin():
     return render_template("admin.html", objetos=objetos)
 
 
+# CADASTRAR OBJETO
 @app.route("/admin/cadastrar", methods=["POST"])
 def cadastrar():
     if not session.get("administrador"):
@@ -233,6 +128,9 @@ def cadastrar():
 
     if not nome or not numero:
         return "Preencha o nome e o telefone.", 400
+
+    if len(nome) > 150 or len(numero) > 40:
+        return "Os dados ultrapassaram o limite permitido.", 400
 
     codigo = secrets.token_urlsafe(9)
 
@@ -245,6 +143,44 @@ def cadastrar():
     return redirect(url_for("admin"))
 
 
+# EDITAR OBJETO
+@app.route("/admin/editar/<codigo>", methods=["GET", "POST"])
+def editar(codigo):
+    if not session.get("administrador"):
+        return redirect(url_for("login"))
+
+    with conectar_banco() as conn:
+        objeto = conn.execute("""
+            SELECT codigo, nome, numero
+            FROM objetos
+            WHERE codigo = %s
+        """, (codigo,)).fetchone()
+
+        if not objeto:
+            return "Objeto não encontrado.", 404
+
+        if request.method == "POST":
+            nome = request.form.get("nome", "").strip()
+            numero = request.form.get("numero", "").strip()
+
+            if not nome or not numero:
+                return "Preencha o nome e o telefone.", 400
+
+            if len(nome) > 150 or len(numero) > 40:
+                return "Os dados ultrapassaram o limite permitido.", 400
+
+            conn.execute("""
+                UPDATE objetos
+                SET nome = %s, numero = %s
+                WHERE codigo = %s
+            """, (nome, numero, codigo))
+
+            return redirect(url_for("admin"))
+
+    return render_template("editar.html", objeto=objeto)
+
+
+# GERAR QR CODE
 @app.route("/qrcode/<codigo>.png")
 def mostrar_qr(codigo):
     if not session.get("administrador"):
@@ -273,12 +209,14 @@ def mostrar_qr(codigo):
     )
 
 
+# SAIR DO PAINEL
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("login"))
 
 
+# PÁGINA PÚBLICA DO QR CODE
 @app.route("/objeto/<codigo>")
 def objeto(codigo):
     with conectar_banco() as conn:
@@ -300,9 +238,11 @@ def objeto(codigo):
     )
 
 
+# PREPARAR BANCO DE DADOS
 preparar_banco()
 
 
+# INICIAR A APLICAÇÃO
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
