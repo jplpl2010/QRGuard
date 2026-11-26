@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Guard | Painel Administrativo</title>
+    <title>QR Guard | Painel administrativo</title>
 
     <style>
         * {
@@ -13,586 +13,377 @@
             padding: 0;
         }
 
-        :root {
-            --fundo: #0b1120;
-            --painel: #111b2e;
-            --painel-claro: #17243a;
-            --azul: #3b82f6;
-            --azul-claro: #60a5fa;
-            --texto: #f1f5f9;
-            --secundario: #94a3b8;
-            --borda: #263650;
-        }
-
         body {
             font-family: "Segoe UI", Arial, sans-serif;
-            background: var(--fundo);
-            color: var(--texto);
+            background: #0b1120;
+            color: #f1f5f9;
             min-height: 100vh;
+            padding: 35px 20px;
         }
 
-        .layout {
-            display: flex;
-            min-height: 100vh;
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: auto;
         }
 
-        .sidebar {
-            width: 245px;
-            background: #0d1628;
-            border-right: 1px solid var(--borda);
-            padding: 28px 18px;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 22px;
-            font-weight: 750;
-            margin-bottom: 48px;
-        }
-
-        .logo-icon {
-            background: var(--azul);
-            width: 42px;
-            height: 42px;
-            display: grid;
-            place-items: center;
-            border-radius: 12px;
-            font-size: 23px;
-        }
-
-        .menu-label {
-            color: #64748b;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            margin: 0 12px 15px;
-        }
-
-        .menu-item {
-            padding: 14px 13px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--secundario);
-            text-decoration: none;
-            margin-bottom: 8px;
-            transition: 0.2s;
-        }
-
-        .menu-item.active,
-        .menu-item:hover {
-            color: white;
-            background: #1d3558;
-        }
-
-        .menu-item.active {
-            border: 1px solid #28508a;
-        }
-
-        .sidebar-bottom {
-            margin-top: auto;
-            padding-top: 24px;
-        }
-
-        .admin-profile {
-            border-top: 1px solid var(--borda);
-            padding: 20px 5px 0;
-            display: flex;
-            align-items: center;
-            gap: 11px;
-            margin-bottom: 15px;
-        }
-
-        .avatar {
-            width: 39px;
-            height: 39px;
-            background: #1e40af;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            font-weight: bold;
-        }
-
-        .profile-name {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .profile-role {
-            color: var(--secundario);
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        .logout {
-            display: block;
-            padding: 12px;
-            color: #fca5a5;
-            text-decoration: none;
-            border-radius: 9px;
-        }
-
-        .logout:hover {
-            background: #3a1b2a;
-        }
-
-        main {
-            flex: 1;
-            min-width: 0;
-            padding: 35px;
-        }
-
-        .topbar {
+        .topo {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 20px;
-            margin-bottom: 34px;
+            margin-bottom: 35px;
         }
 
-        .eyebrow {
-            color: var(--azul-claro);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 11px;
-            font-weight: 700;
-            margin-bottom: 9px;
+        .logo {
+            color: #60a5fa;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         h1 {
-            font-size: clamp(25px, 3vw, 32px);
-            letter-spacing: -0.7px;
+            font-size: 27px;
         }
 
-        .subtitle {
-            color: var(--secundario);
-            margin-top: 9px;
-            line-height: 1.5;
+        .subtitulo {
+            color: #94a3b8;
             font-size: 14px;
+            margin-top: 7px;
         }
 
-        .status {
-            border: 1px solid #24513f;
-            background: #102b26;
-            color: #6ee7b7;
-            border-radius: 30px;
-            padding: 10px 14px;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-
-        .status::before {
-            content: "";
-            display: inline-block;
-            width: 7px;
-            height: 7px;
-            background: #34d399;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-            margin-bottom: 28px;
-        }
-
-        .stat-card {
-            background: var(--painel);
-            border: 1px solid var(--borda);
-            border-radius: 15px;
-            padding: 23px;
-        }
-
-        .stat-label {
-            color: var(--secundario);
+        .sair {
+            color: #94a3b8;
+            text-decoration: none;
+            border: 1px solid #30415b;
+            padding: 10px 16px;
+            border-radius: 8px;
             font-size: 13px;
+            transition: .2s;
         }
 
-        .stat-number {
-            font-size: 30px;
-            font-weight: 750;
-            margin-top: 13px;
+        .sair:hover {
+            color: white;
+            border-color: #60a5fa;
         }
 
-        .stat-description {
-            font-size: 12px;
-            color: var(--secundario);
-            margin-top: 7px;
+        .card {
+            background: #111b2e;
+            border: 1px solid #263650;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
         }
 
-        .content-grid {
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .formulario {
             display: grid;
-            grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.4fr);
-            gap: 22px;
-            align-items: start;
-        }
-
-        .panel {
-            background: var(--painel);
-            border: 1px solid var(--borda);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .panel-header {
-            padding: 23px;
-            border-bottom: 1px solid var(--borda);
-        }
-
-        .panel-header h2 {
-            font-size: 17px;
-        }
-
-        .panel-header p {
-            color: var(--secundario);
-            font-size: 12px;
-            margin-top: 7px;
-            line-height: 1.5;
-        }
-
-        .panel-body {
-            padding: 23px;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
         }
 
         label {
             display: block;
             color: #cbd5e1;
             font-size: 13px;
-            margin-bottom: 9px;
+            margin-bottom: 8px;
         }
 
         input {
             width: 100%;
-            padding: 13px 14px;
-            border-radius: 9px;
+            padding: 13px;
+            border-radius: 8px;
             background: #0b1425;
             border: 1px solid #30415b;
             color: white;
             outline: none;
-            margin-bottom: 20px;
             font-size: 14px;
         }
 
         input:focus {
-            border-color: var(--azul);
-            box-shadow: 0 0 0 3px #3b82f620;
-        }
-
-        input::placeholder {
-            color: #64748b;
+            border-color: #3b82f6;
         }
 
         button {
-            width: 100%;
-            padding: 13px 15px;
             border: none;
-            border-radius: 9px;
-            background: var(--azul);
-            color: white;
-            font-size: 14px;
-            font-weight: 650;
             cursor: pointer;
-            transition: 0.2s;
+            font-weight: bold;
+            transition: .2s;
         }
 
-        button:hover {
+        .adicionar {
+            background: #3b82f6;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .adicionar:hover {
             background: #2563eb;
-            transform: translateY(-1px);
         }
 
-        .privacy-note {
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 17px;
-            line-height: 1.6;
-        }
-
-        .object-list {
-            padding: 12px;
-        }
-
-        .object-card {
-            background: var(--painel-claro);
-            border: 1px solid #293b56;
-            border-radius: 12px;
-            padding: 17px;
-            margin-bottom: 11px;
-        }
-
-        .object-card:last-child {
-            margin-bottom: 0;
-        }
-
-        .object-top {
+        .titulo-lista {
             display: flex;
             justify-content: space-between;
-            gap: 12px;
-            align-items: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
         }
 
-        .object-name {
-            font-size: 15px;
-            font-weight: 650;
-            overflow-wrap: anywhere;
-        }
-
-        .object-code {
-            color: var(--azul-claro);
-            background: #1c3558;
-            padding: 5px 8px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 11px;
-            overflow-wrap: anywhere;
-        }
-
-        .object-phone {
-            color: var(--secundario);
+        .contador {
+            color: #60a5fa;
             font-size: 13px;
-            margin: 12px 0 16px;
         }
 
-        .qr-link {
-            display: inline-block;
-            text-decoration: none;
-            color: #bfdbfe;
-            background: #1e40af40;
-            border: 1px solid #315ca1;
-            border-radius: 8px;
-            padding: 9px 12px;
+        .objeto {
+            background: #0d1729;
+            border: 1px solid #263650;
+            border-radius: 11px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .informacoes {
+            min-width: 0;
+        }
+
+        .nome {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .telefone {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .codigo {
+            color: #60a5fa;
+            font-family: monospace;
             font-size: 12px;
-            font-weight: 600;
+            overflow-wrap: anywhere;
         }
 
-        .qr-link:hover {
+        .acoes {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .editar, .qr {
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: .2s;
+        }
+
+        .editar {
             background: #1d4ed8;
             color: white;
         }
 
-        .empty {
+        .editar:hover {
+            background: #2563eb;
+        }
+
+        .qr {
+            background: #17243a;
+            color: #60a5fa;
+            border: 1px solid #30415b;
+        }
+
+        .qr:hover {
+            background: #263650;
+        }
+
+        .vazio {
             text-align: center;
-            padding: 40px 15px;
-            color: var(--secundario);
-            font-size: 13px;
-            line-height: 1.7;
+            padding: 35px 15px;
+            color: #64748b;
+            font-size: 14px;
         }
 
-        .empty-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        @media (max-width: 1050px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
+        .rodape {
+            text-align: center;
+            color: #475569;
+            font-size: 12px;
+            margin-top: 30px;
         }
 
         @media (max-width: 700px) {
-            .layout {
-                flex-direction: column;
+            .formulario {
+                grid-template-columns: 1fr;
             }
 
-            .sidebar {
+            .adicionar {
                 width: 100%;
-                padding: 17px;
             }
 
-            .logo {
-                margin-bottom: 20px;
-            }
-
-            .menu-label,
-            .sidebar-bottom {
-                display: none;
-            }
-
-            .menu-item {
-                margin: 0;
-            }
-
-            main {
-                padding: 22px 15px;
-            }
-
-            .topbar {
-                align-items: flex-start;
+            .objeto {
                 flex-direction: column;
+                align-items: stretch;
             }
 
-            .stats {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
+            .acoes {
+                width: 100%;
             }
 
-            .stat-card {
-                padding: 16px;
+            .acoes a {
+                flex: 1;
+                text-align: center;
             }
 
-            .stat-number {
-                font-size: 25px;
+            .topo {
+                align-items: flex-start;
             }
         }
     </style>
 </head>
 
 <body>
-<div class="layout">
 
-    <aside class="sidebar">
-        <div class="logo">
-            <div class="logo-icon">⌗</div>
-            <span>QR<span style="color:#60a5fa">Guard</span></span>
+<div class="container">
+
+    <header class="topo">
+        <div>
+            <div class="logo">⌗ QRGuard</div>
+            <h1>Painel administrativo</h1>
+            <p class="subtitulo">
+                Gerencie os objetos cadastrados no QRGuard.
+            </p>
         </div>
 
-        <div class="menu-label">MENU PRINCIPAL</div>
-
-        <a class="menu-item active" href="{{ url_for('admin') }}">
-            <span>▦</span>
-            <span>Painel geral</span>
+        <a href="{{ url_for('logout') }}" class="sair">
+            Sair
         </a>
+    </header>
 
-        <a class="menu-item" href="#cadastro">
-            <span>＋</span>
-            <span>Cadastrar objeto</span>
-        </a>
+    <section class="card">
 
-        <a class="menu-item" href="#objetos">
-            <span>▤</span>
-            <span>Meus objetos</span>
-        </a>
+        <h2>Cadastrar novo objeto</h2>
 
-        <div class="sidebar-bottom">
-            <div class="admin-profile">
-                <div class="avatar">A</div>
-                <div>
-                    <div class="profile-name">Administrador</div>
-                    <div class="profile-role">Acesso autorizado</div>
-                </div>
-            </div>
+        <form
+            action="{{ url_for('cadastrar') }}"
+            method="POST"
+            class="formulario"
+        >
 
-            <a class="logout" href="{{ url_for('logout') }}">
-                ↪ &nbsp; Sair do painel
-            </a>
-        </div>
-    </aside>
-
-    <main>
-        <header class="topbar">
             <div>
-                <div class="eyebrow">Área administrativa</div>
-                <h1>Painel de controle</h1>
-                <p class="subtitle">
-                    Gerencie seus objetos e seus QR Codes em um só lugar.
-                </p>
+                <label for="nome">Nome do proprietário</label>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    maxlength="150"
+                    placeholder="Nome completo"
+                    required
+                >
             </div>
 
-            <div class="status">Painel protegido</div>
-        </header>
-
-        <section class="stats">
-            <div class="stat-card">
-                <div class="stat-label">Objetos cadastrados</div>
-                <div class="stat-number">{{ objetos|length }}</div>
-                <div class="stat-description">Registros armazenados no banco de dados</div>
+            <div>
+                <label for="numero">Telefone para contato</label>
+                <input
+                    type="tel"
+                    id="numero"
+                    name="numero"
+                    maxlength="40"
+                    placeholder="(00) 00000-0000"
+                    required
+                >
             </div>
 
-            <div class="stat-card">
-                <div class="stat-label">QR Codes disponíveis</div>
-                <div class="stat-number">{{ objetos|length }}</div>
-                <div class="stat-description">Um código exclusivo para cada objeto</div>
-            </div>
-        </section>
+            <button type="submit" class="adicionar">
+                + Cadastrar objeto
+            </button>
 
-        <section class="content-grid">
+        </form>
 
-            <div class="panel" id="cadastro">
-                <div class="panel-header">
-                    <h2>＋ Cadastrar novo objeto</h2>
-                    <p>Preencha os dados para gerar um código de identificação exclusivo.</p>
-                </div>
+    </section>
 
-                <div class="panel-body">
-                    <form action="{{ url_for('cadastrar') }}" method="POST">
-                        <label for="nome">Nome do proprietário</label>
-                        <input
-                            type="text"
-                            id="nome"
-                            name="nome"
-                            placeholder="Ex.: João Silva"
-                            maxlength="150"
-                            required
-                        >
+    <section class="card">
 
-                        <label for="numero">Telefone para contato</label>
-                        <input
-                            type="tel"
-                            id="numero"
-                            name="numero"
-                            placeholder="Ex.: (67) 99999-9999"
-                            maxlength="40"
-                            required
-                        >
+        <div class="titulo-lista">
+            <h2>Objetos cadastrados</h2>
 
-                        <button type="submit">Cadastrar e gerar código</button>
-                    </form>
+            <span class="contador">
+                {{ objetos|length }} objeto(s)
+            </span>
+        </div>
 
-                    <p class="privacy-note">
-                        Os dados serão armazenados no banco de dados.
-                        Cadastre apenas informações necessárias e autorizadas.
-                    </p>
-                </div>
-            </div>
+        {% if objetos %}
 
-            <div class="panel" id="objetos">
-                <div class="panel-header">
-                    <h2>Seus objetos</h2>
-                    <p>Consulte os registros e abra o QR Code de cada objeto.</p>
-                </div>
+            {% for objeto in objetos %}
 
-                <div class="object-list">
-                    {% if objetos %}
-                        {% for objeto in objetos %}
-                            <article class="object-card">
-                                <div class="object-top">
-                                    <div class="object-name">{{ objeto[1] }}</div>
-                                    <span class="object-code">{{ objeto[0] }}</span>
-                                </div>
+                <div class="objeto">
 
-                                <div class="object-phone">
-                                    ☎ &nbsp; {{ objeto[2] }}
-                                </div>
+                    <div class="informacoes">
 
-                                <a
-                                    class="qr-link"
-                                    href="{{ url_for('mostrar_qr', codigo=objeto[0]) }}"
-                                    target="_blank"
-                                    rel="noopener"
-                                >
-                                    ▦ &nbsp; Abrir QR Code
-                                </a>
-                            </article>
-                        {% endfor %}
-                    {% else %}
-                        <div class="empty">
-                            <div class="empty-icon">▦</div>
-                            <strong>Nenhum objeto cadastrado</strong>
-                            <p>Use o formulário ao lado para criar seu primeiro registro.</p>
+                        <div class="nome">
+                            {{ objeto[1] }}
                         </div>
-                    {% endif %}
+
+                        <div class="telefone">
+                            {{ objeto[2] }}
+                        </div>
+
+                        <div class="codigo">
+                            ID: {{ objeto[0] }}
+                        </div>
+
+                    </div>
+
+                    <div class="acoes">
+
+                        <a
+                            href="{{ url_for('editar', codigo=objeto[0]) }}"
+                            class="editar"
+                        >
+                            Editar
+                        </a>
+
+                        <a
+                            href="{{ url_for('mostrar_qr', codigo=objeto[0]) }}"
+                            class="qr"
+                            target="_blank"
+                        >
+                            QR Code
+                        </a>
+
+                    </div>
+
                 </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="vazio">
+                Nenhum objeto cadastrado ainda.
             </div>
 
-        </section>
-    </main>
+        {% endif %}
+
+    </section>
+
+    <footer class="rodape">
+        QRGuard · Proteção inteligente para seus objetos
+    </footer>
+
 </div>
+
 </body>
 </html>
