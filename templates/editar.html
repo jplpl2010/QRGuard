@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Guard | Editar objeto</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #0b1120;
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: #111b2e;
+            border: 1px solid #263650;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 25px;
+            border-bottom: 1px solid #263650;
+        }
+
+        .logo {
+            color: #60a5fa;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        label {
+            display: block;
+            color: #cbd5e1;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border-radius: 9px;
+            background: #0b1425;
+            border: 1px solid #30415b;
+            color: white;
+            outline: none;
+            margin-bottom: 22px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px #3b82f620;
+        }
+
+        .codigo {
+            background: #17243a;
+            padding: 13px;
+            border-radius: 9px;
+            margin-bottom: 23px;
+            color: #60a5fa;
+            font-family: monospace;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #3b82f6;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .voltar {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .voltar:hover {
+            color: white;
+        }
+
+        .aviso {
+            color: #64748b;
+            font-size: 11px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <div class="logo">⌗ QRGuard</div>
+
+        <h1>Editar objeto</h1>
+
+        <p class="subtitle">
+            Atualize os dados de identificação do proprietário.
+        </p>
+
+    </div>
+
+    <div class="content">
+
+        <form method="POST">
+
+            <label for="codigo">
+                Código de identificação
+            </label>
+
+            <div class="codigo">
+                {{ objeto[0] }}
+            </div>
+
+            <label for="nome">
+                Nome do proprietário
+            </label>
+
+            <input
+                type="text"
+                id="nome"
+                name="nome"
+                value="{{ objeto[1] }}"
+                maxlength="150"
+                required
+            >
+
+            <label for="numero">
+                Telefone para contato
+            </label>
+
+            <input
+                type="tel"
+                id="numero"
+                name="numero"
+                value="{{ objeto[2] }}"
+                maxlength="40"
+                required
+            >
+
+            <button type="submit">
+                Salvar alterações
+            </button>
+
+        </form>
+
+        <a href="{{ url_for('admin') }}" class="voltar">
+            ← Voltar ao painel administrativo
+        </a>
+
+        <p class="aviso">
+            As alterações serão aplicadas ao cadastro existente.
+            O QR Code original continuará funcionando normalmente.
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>
